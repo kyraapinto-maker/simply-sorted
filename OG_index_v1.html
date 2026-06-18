@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Studio | Interior Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #f5f0e8;
+      --warm-white: #faf7f2;
+      --brown:    #5c3d2e;
+      --tan:      #a47c5b;
+      --dark:     #2a1f18;
+      --muted:    #8a7060;
+      --border:   rgba(92,61,46,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--warm-white);
+      color: var(--dark);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(250,247,242,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav.scrolled { padding: 0.9rem 4rem; }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brown);
+      text-decoration: none;
+    }
+    .logo span { font-style: italic; font-weight: 300; }
+
+    .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dark);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px; background: var(--tan);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--brown); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 1px; background: var(--dark); transition: all 0.3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      height: 100vh; position: relative;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #c9b99a 0%, #a08060 35%, #6b4c35 70%, #3d2515 100%);
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,15,5,0.55) 0%, transparent 60%);
+    }
+    /* Decorative geometric overlay */
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 40%, rgba(255,220,180,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 40% at 20% 70%, rgba(90,50,20,0.3) 0%, transparent 60%);
+    }
+
+    /* Decorative lines */
+    .hero-line {
+      position: absolute;
+      width: 1px; background: rgba(255,255,255,0.25);
+      top: 0; bottom: 0;
+      animation: lineReveal 1.8s ease forwards;
+      transform-origin: top;
+      opacity: 0;
+    }
+    .hero-line:nth-child(1) { left: 33%; animation-delay: 0.6s; }
+    .hero-line:nth-child(2) { left: 66%; animation-delay: 0.9s; }
+    @keyframes lineReveal { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 4rem 5rem;
+      max-width: 780px;
+      animation: heroFadeUp 1.2s ease 0.3s both;
+    }
+    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7); margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.18;
+      color: #fff;
+      margin-bottom: 2rem;
+    }
+    .hero h1 em { font-style: italic; font-weight: 300; }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 0.8rem 2.2rem;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .hero-cta:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; right: 4rem; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      animation: heroFadeUp 1.2s ease 1s both;
+    }
+    .scroll-hint::before {
+      content: '';
+      display: block; width: 1px; height: 50px;
+      background: rgba(255,255,255,0.35);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(1.4); opacity: 1; }
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 7rem 4rem; }
+
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 1rem;
+    }
+    h2.section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400; line-height: 1.25;
+      color: var(--dark); margin-bottom: 1.5rem;
+    }
+    h2.section-title em { font-style: italic; color: var(--tan); }
+
+    .text-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--brown); text-decoration: none;
+      margin-top: 2rem; transition: gap 0.3s;
+    }
+    .text-link::after { content: '→'; transition: transform 0.3s; }
+    .text-link:hover { gap: 1rem; }
+    .text-link:hover::after { transform: translateX(4px); }
+
+    /* ─── SERVICES ─── */
+    .services { background: var(--cream); }
+    .services-intro {
+      text-align: center; max-width: 560px; margin: 0 auto 5rem;
+    }
+    .services-intro p {
+      font-size: 1rem; line-height: 1.8; color: var(--muted);
+    }
+
+    .services-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .service-card {
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .service-img {
+      aspect-ratio: 4/3;
+      overflow: hidden; margin-bottom: 2rem;
+    }
+    .service-img .img-fill {
+      width: 100%; height: 100%;
+      transition: transform 0.7s ease;
+    }
+    .service-card:hover .img-fill { transform: scale(1.04); }
+
+    /* Placeholder images using CSS gradients */
+    .img-id   { background: linear-gradient(135deg, #c4a882 0%, #8a6545 50%, #5c3d2e 100%); }
+    .img-consult { background: linear-gradient(135deg, #d4bfa0 0%, #b8956a 40%, #7a5240 100%); }
+    .img-proj1 { background: linear-gradient(135deg, #b5a090 0%, #8a6c58 50%, #5a3d30 100%); }
+    .img-proj2 { background: linear-gradient(135deg, #c8b5a0 0%, #9a7860 50%, #6a4838 100%); }
+    .img-proj3 { background: linear-gradient(135deg, #d0bca8 0%, #a88060 50%, #705040 100%); }
+    .img-about { background: linear-gradient(160deg, #e8d8c0 0%, #c0956a 45%, #7a5030 100%); }
+    .img-contact { background: linear-gradient(160deg, #d5c4b0 0%, #b08060 45%, #6a4025 100%); }
+
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 400; color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .service-card p {
+      font-size: 0.92rem; line-height: 1.85; color: var(--muted);
+      flex: 1;
+    }
+
+    /* ─── TESTIMONIAL ─── */
+    .testimonial {
+      background: var(--dark);
+      text-align: center; padding: 6rem 4rem;
+    }
+    .testimonial blockquote {
+      max-width: 720px; margin: 0 auto;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 300; font-style: italic;
+      line-height: 1.65; color: rgba(255,255,255,0.88);
+    }
+    .testimonial cite {
+      display: block; margin-top: 2rem;
+      font-family: 'Jost', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--tan); font-style: normal;
+    }
+    .testimonial cite::before { content: '— '; }
+
+    /* Decorative quote mark */
+    .testimonial::before {
+      content: '\201C';
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem; line-height: 0.5;
+      color: rgba(164,124,91,0.3);
+      margin-bottom: 2rem;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto 3.5rem;
+    }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .project-card {
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .project-img {
+      aspect-ratio: 3/4; overflow: hidden; position: relative;
+    }
+    .project-img .img-fill { width: 100%; height: 100%; transition: transform 0.7s ease; }
+    .project-card:hover .img-fill { transform: scale(1.06); }
+
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30,15,5,0.7) 0%, transparent 50%);
+      display: flex; align-items: flex-end;
+      padding: 1.8rem;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .project-card:hover .project-overlay { opacity: 1; }
+
+    .project-label {
+      margin-top: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: var(--dark);
+    }
+    .project-overlay-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: #fff; font-weight: 400;
+    }
+
+    /* ─── ABOUT ─── */
+    .about { background: var(--cream); }
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+      max-width: 1200px; margin: 0 auto; align-items: center;
+    }
+    .about-img { aspect-ratio: 3/4; overflow: hidden; }
+    .about-img .img-fill { width: 100%; height: 100%; }
+
+    .about-text .section-label { margin-bottom: 0.5rem; }
+    .about-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      font-weight: 400; line-height: 1.28;
+      color: var(--dark); margin-bottom: 1.8rem;
+    }
+    .about-text p {
+      font-size: 0.95rem; line-height: 1.9; color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    /* ─── CONTACT STRIP ─── */
+    .contact-strip {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+    .contact-img { overflow: hidden; }
+    .contact-img .img-fill { width: 100%; height: 100%; object-fit: cover; }
+
+    .contact-text {
+      background: var(--dark);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem;
+    }
+    .contact-text .section-label { color: var(--tan); }
+    .contact-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      font-weight: 300; line-height: 1.3;
+      color: #fff; margin-bottom: 1.4rem;
+    }
+    .contact-text p {
+      font-size: 0.92rem; line-height: 1.85;
+      color: rgba(255,255,255,0.6);
+      max-width: 400px;
+    }
+    .contact-text .text-link { color: var(--tan); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 5rem 4rem 3rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; max-width: 1200px; margin: 0 auto 4rem;
+    }
+
+    .footer-brand .logo { font-size: 1.3rem; color: rgba(255,255,255,0.85); }
+    .footer-brand p {
+      margin-top: 1.2rem;
+      font-size: 0.85rem; line-height: 1.75;
+      color: rgba(255,255,255,0.45);
+    }
+    .footer-hours {
+      margin-top: 1.5rem;
+      font-size: 0.8rem; line-height: 1.9;
+      color: rgba(255,255,255,0.45);
+    }
+    .footer-hours strong {
+      display: block; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      font-size: 0.7rem; margin-bottom: 0.4rem;
+    }
+
+    .footer-col h4 {
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.7rem; }
+    .footer-col a {
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
+      text-decoration: none; transition: color 0.25s;
+    }
+    .footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-bottom p {
+      font-size: 0.72rem; color: rgba(255,255,255,0.3);
+      letter-spacing: 0.05em;
+    }
+    .footer-legal { display: flex; gap: 2rem; }
+    .footer-legal a {
+      font-size: 0.72rem; color: rgba(255,255,255,0.3);
+      text-decoration: none; transition: color 0.25s;
+    }
+    .footer-legal a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ─── MOBILE NAV OVERLAY ─── */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--warm-white);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem; font-weight: 300;
+      color: var(--dark); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .mobile-menu a:hover { color: var(--tan); }
+    .mobile-menu-close {
+      position: absolute; top: 1.6rem; right: 2rem;
+      background: none; border: none;
+      font-size: 1.8rem; cursor: pointer; color: var(--dark);
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      section { padding: 5rem 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img { aspect-ratio: 4/3; }
+      .contact-strip { grid-template-columns: 1fr; }
+      .contact-img { height: 300px; }
+      .contact-text { padding: 3rem 2rem; }
+      footer { padding: 4rem 2rem 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand { grid-column: 1 / -1; }
+      .hero-content { padding: 0 2rem 4rem; }
+      .scroll-hint { display: none; }
+      .projects-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <a href="#" class="logo">Your <span>Studio</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">Studio</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#services">Consultations</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="menuClose">✕</button>
+    <a href="#about" class="menu-link">Studio</a>
+    <a href="#projects" class="menu-link">Projects</a>
+    <a href="#services" class="menu-link">Services</a>
+    <a href="#services" class="menu-link">Consultations</a>
+    <a href="#contact" class="menu-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-line"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Interior Design Studio · London &amp; South East</p>
+      <h1>Creating <em>beautifully original</em> homes made for living.</h1>
+      <a href="#services" class="hero-cta">Explore Our Work</a>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-intro reveal">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Spaces that feel <em>deeply connected</em> to you</h2>
+      <p>From full-service design that handles every detail, to focused consultations that give you the clarity to move forward — we create interiors rooted in how you love to live.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-img">
+          <div class="img-fill img-id"></div>
+        </div>
+        <h3>Interior Design</h3>
+        <p>From full-service design that carefully handles every detail to virtual design you can bring to life at your own pace, we create spaces that feel deeply connected to you and the way you love to live.</p>
+        <a href="#contact" class="text-link">See more</a>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-img">
+          <div class="img-fill img-consult"></div>
+        </div>
+        <h3>Interior Consultations</h3>
+        <p>When you need fresh eyes, expert insight or a spark of inspiration, our focused 60-minute sessions help you find clarity and confidence in your next steps — wherever you are in your project.</p>
+        <a href="#contact" class="text-link">See more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial">
+    <blockquote>
+      "The studio was incredibly collaborative and exuded calm through all the twists and turns of the project. Fresh ideas while staying true to the original vision — making every decision feel like a breeze."
+      <cite>A Happy Client</cite>
+    </blockquote>
+  </div>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="background: var(--warm-white);">
+    <div class="projects-header reveal">
+      <div>
+        <p class="section-label">Portfolio</p>
+        <h2 class="section-title">Our <em>Projects</em></h2>
+      </div>
+      <a href="#projects" class="text-link">All projects</a>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-img">
+          <div class="img-fill img-proj1"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-title">Soho Loft</span>
+          </div>
+        </div>
+        <p class="project-label">Soho Loft</p>
+      </div>
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-img">
+          <div class="img-fill img-proj2"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-title">Hill House</span>
+          </div>
+        </div>
+        <p class="project-label">Hill House</p>
+      </div>
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-img">
+          <div class="img-fill img-proj3"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-title">Kitchen Reno</span>
+          </div>
+        </div>
+        <p class="project-label">Kitchen Renovation</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-img reveal">
+        <div class="img-fill img-about"></div>
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <p class="section-label">About the Studio</p>
+        <h2>The best homes aren't perfect — they're <em>deeply personal.</em></h2>
+        <p>They carry the creak in the floorboard, the uneven walls that add character, the favourite chair by the window where you savour your morning coffee. They hold the stories of the people who live there.</p>
+        <p>We design considered, earthy interiors that invite you to slow down, feel at ease and connect with the life unfolding within them. Every colour, texture and detail is chosen with care so your home feels warm, distinctive and delightfully yours.</p>
+        <a href="#contact" class="text-link">See more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT STRIP -->
+  <div class="contact-strip" id="contact">
+    <div class="contact-img">
+      <div class="img-fill img-contact" style="height:100%;"></div>
+    </div>
+    <div class="contact-text">
+      <p class="section-label">Get In Touch</p>
+      <h2>Your home should feel like the truest reflection of you.</h2>
+      <p>Whether you're starting with a blank canvas or breathing new life into a much-loved space, let's explore how we can make it happen together — and make the process feel just as good as the result.</p>
+      <a href="mailto:hello@yourstudio.com" class="text-link">Get in touch</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">Your <span>Studio</span></a>
+        <p>An interior design studio working in London, the South East, and beyond. Creating homes that feel deeply personal, warmly considered, and built for living.</p>
+        <div class="footer-hours">
+          <strong>Studio Hours</strong>
+          Monday – Friday | 9:00am – 5:30pm<br />
+          Phone: +44 20 0000 0000
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#">Journal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Interior Design</a></li>
+          <li><a href="#services">Consultations</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">Houzz</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Your Studio Ltd © 2026 · All Rights Reserved</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Disclaimer</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll shrink
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile menu
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    const close = document.getElementById('menuClose');
+    toggle.addEventListener('click', () => menu.classList.add('open'));
+    close.addEventListener('click', () => menu.classList.remove('open'));
+    document.querySelectorAll('.menu-link').forEach(l =>
+      l.addEventListener('click', () => menu.classList.remove('open'))
+    );
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

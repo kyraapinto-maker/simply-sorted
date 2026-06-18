@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simply Sorted | Space Reorganisation Specialists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #f5f0e8;
+      --warm-white: #fffdf6;
+      --brown:      #5c3d2e;
+      --tan:        #a4724a;
+      --dark:       #2a1f18;
+      --muted:      #886b59;
+      --border:     rgba(92, 61, 46, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--warm-white);
+      color: var(--dark);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+    }
+
+    /* Reusable image helper (replaces repeated inline styles) */
+    .img-cover {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Reusable image helper (replaces repeated inline styles) */
+    .img-contain {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 8rem;
+      background: var(--cream);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav.scrolled { padding: 0.9rem 8rem; }
+
+    .brand { display: flex; align-items: center; gap: 0.75rem; }
+    .brand img { height: 60px; width: auto; display: block; }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brown);
+      text-decoration: none;
+    }
+    .logo span { font-style: italic; font-weight: 300; }
+
+    .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+    .nav-links a {
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dark);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 1px; background: var(--tan);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--brown); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 1px; background: var(--dark); transition: all 0.3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      height: 100vh; position: relative;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* Decorative vertical lines */
+    .hero-line {
+      position: absolute; top: 0; bottom: 0; z-index: 1;
+      width: 1px; background: rgba(255, 255, 255, 0.18);
+      animation: lineReveal 1.8s ease forwards;
+      transform-origin: top;
+      opacity: 0;
+    }
+    .hero-line:nth-child(1) { left: 33%; animation-delay: 0.6s; }
+    .hero-line:nth-child(2) { left: 66%; animation-delay: 0.9s; }
+    @keyframes lineReveal { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 4rem 5rem;
+      max-width: 780px;
+      animation: heroFadeUp 1.2s ease 0.3s both;
+    }
+    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero-eyebrow {
+      font-size: 1.1rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 1.2rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 0.8rem 2.2rem;
+      border: 1px solid var(--tan);
+      color: var(--tan);
+      text-decoration: none;
+      text-align: center;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+    .hero-cta:hover { background: var(--tan); color: var(--cream); border-color: var(--tan); }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; right: 4rem; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+      color: var(--brown);
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      animation: heroFadeUp 1.2s ease 1s both;
+    }
+    .scroll-hint::before {
+      content: '';
+      display: block; width: 1px; height: 50px;
+      background: var(--brown);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50%      { transform: scaleY(1.4); opacity: 1; }
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 7rem 4rem; }
+
+    .section-label {
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400; line-height: 1.25;
+      color: var(--dark); margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--tan); }
+
+    .text-link {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--brown); text-decoration: none;
+      margin-top: 2rem; transition: gap 0.3s;
+    }
+    .text-link::after { content: '→'; transition: transform 0.3s; }
+    .text-link:hover { gap: 1rem; }
+    .text-link:hover::after { transform: translateX(4px); }
+
+    /* ─── SERVICES (room areas, 3-up image cards) ─── */
+    .services { background: var(--cream); }
+
+    .services-intro { text-align: center; max-width: 560px; margin: 0 auto 5rem; }
+    .services-intro p { font-size: 1.2rem; line-height: 1.8; color: var(--muted); }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .service-card { position: relative; overflow: hidden; cursor: pointer; }
+
+    .service-img { position: relative; aspect-ratio: 3/4; overflow: hidden; }
+    .service-img img { transition: transform 0.7s ease; }
+    .service-card:hover .service-img img { transform: scale(1.06); }
+
+    .service-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(30, 15, 5, 0.7) 0%, transparent 80%);
+      display: flex; align-items: flex-end;
+      padding: 1.8rem;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .service-card:hover .service-overlay { opacity: 1; }
+    .service-overlay-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: #fff; font-weight: 400;
+    }
+    .service-label {
+      margin-top: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; color: var(--dark);
+    }
+
+    /* ─── TESTIMONIAL ─── */
+    .testimonial {
+      background: var(--dark);
+      padding: 6rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 3rem;
+    }
+    .testimonial-content {
+      flex: 4;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .testimonial-content::before {
+      content: '\201C';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem; line-height: 0.5;
+      color: rgba(164, 124, 91, 0.3);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .testimonial blockquote {
+      margin: 0 auto; text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 300; font-style: italic; line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    .testimonial cite {
+      display: block; margin-top: 2rem;
+      font-family: 'Jost', sans-serif; font-size: 0.9rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--tan); font-style: normal;
+    }
+    .testimonial-image { flex: 1; display: flex; justify-content: center; }
+    .testimonial-image img { max-width: 140px; width: 100%; height: auto; }
+
+    /* ─── PROJECTS (offerings, 2-up slideshow cards) ─── */
+    .projects { background: var(--cream); }
+
+    .projects-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto 3.5rem;
+    }
+
+    .projects-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .project-card {
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+    }
+
+    .project-img {
+      position: relative;
+      width: 100%; max-width: 400px; aspect-ratio: 4/3;
+      overflow: hidden;
+      margin: 0 auto 2rem;
+    }
+    .slide {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: contain;
+      opacity: 0; transition: opacity 0.8s ease;
+    }
+    .slide.active { opacity: 1; }
+
+    .project-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 400; color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .project-card p {
+      font-size: 1.2rem; line-height: 1.85; color: var(--muted);
+      flex: 1;
+    }
+
+    /* ─── ABOUT ─── */
+    section#about { padding-left: 4rem; padding-right: 5rem; padding-top: 1rem; padding-bottom: 1rem; }
+
+    .about-strip { display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+
+    .about-text {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem;
+    }
+    .about-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      font-weight: 300; line-height: 1.3;
+      color: var(--dark); margin-bottom: 0.5rem;
+    }
+    .about-text h2 em { font-style: italic; font-weight: 300; color: var(--tan); }
+    .about-text p { font-size: 1.2rem; line-height: 1.85; color: var(--tan); max-width: 400px; }
+    .about-text p em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.5rem; font-weight: 600; color: var(--tan); }
+
+    .about-img { overflow: hidden; max-height: 500px;}
+
+    /* ─── CONTACT STRIP ─── */
+    .contact-strip { display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+
+    .contact-img { overflow: hidden; background: var(--cream);}
+
+    .contact-text {
+      background: var(--dark);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem;
+    }
+    .contact-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      font-weight: 300; line-height: 1.3;
+      color: #fff; margin-bottom: 1.4rem;
+    }
+    .contact-text p { font-size: 1.2rem; line-height: 1.85; color: rgba(255, 255, 255, 0.6); max-width: 400px; }
+    .contact-text .text-link { color: var(--tan); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 5rem 4rem 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 5rem; max-width: 1200px; margin: 0 auto 4rem;
+    }
+    .footer-brand .logo { font-size: 1.3rem; color: rgba(255, 255, 255, 0.85); }
+    .footer-brand p { margin-top: 1rem; font-size: 1rem; line-height: 1.75; color: rgba(255, 255, 255, 0.5); }
+
+    .footer-col h4 {
+      font-size: 0.9rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.7rem; }
+    .footer-col a { font-size: 1rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.25s; }
+    .footer-col a:hover { color: rgba(255, 255, 255, 0.9); }
+
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-bottom p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.3); letter-spacing: 0.05em; }
+    .footer-legal { display: flex; gap: 2rem; }
+    .footer-legal a { font-size: 0.8rem; color: rgba(255, 255, 255, 0.3); text-decoration: none; transition: color 0.25s; }
+    .footer-legal a:hover { color: rgba(255, 255, 255, 0.6); }
+
+    /* ─── MOBILE NAV OVERLAY ─── */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--warm-white);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem; font-weight: 300;
+      color: var(--dark); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .mobile-menu a:hover { color: var(--tan); }
+    .mobile-menu-close {
+      position: absolute; top: 1.6rem; right: 2rem;
+      background: none; border: none;
+      font-size: 1.8rem; cursor: pointer; color: var(--dark);
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav, nav.scrolled { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      section { padding: 5rem 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .about-strip { grid-template-columns: 1fr; }
+      /* .about-img { height: 500px; } */
+      .contact-strip { grid-template-columns: 1fr; }
+      .contact-img { height: 300px; }
+      .about-text, .contact-text { padding: 3rem 2rem; }
+      footer { padding: 4rem 2rem 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand { grid-column: 1 / -1; }
+      .hero-content { padding: 0 2rem 4rem; }
+      .scroll-hint { display: none; }
+      .projects-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .testimonial { flex-direction: column; }
+    }
+
+    @media (max-width: 600px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <div class="brand">
+      <img src="logo.png" alt="Simply Sorted logo" />
+      <a href="#" class="logo">Simply <span>Sorted</span></a>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="menuClose">✕</button>
+    <a href="#projects" class="menu-link">Projects</a>
+    <a href="#services" class="menu-link">Services</a>
+    <a href="#contact" class="menu-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+    <section class="hero">
+    <div class="hero-line"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Space Reorganisation Specialists</p>
+      <h2 class="section-title">Struggling to fit everything into <em>limited space</em> without losing clarity?</h2>
+      <a href="#services" class="hero-cta">Explore Our Work</a>
+    </div>
+    <img src="beanbag.png" alt="Bean bag" style="width: 100%; height: 100%; object-fit: cover;">
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- SERVICES (room areas) -->
+  <section class="services" id="services">
+    <div class="services-intro reveal">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Creating <em>beautifully organised</em> homes made for living.</h2>
+      <p>From whole-home transformations that overhaul every room, to targeted reorganisation of your most cluttered spaces - we help restore order and rhythm to your living zones.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-img">
+          <img src="bed+dresser.png" alt="Organised bedroom" class="img-cover" />
+          <div class="service-overlay">
+            <span class="service-overlay-title">Bedroom space recategorised so you always know exactly where to look.</span>
+          </div>
+        </div>
+        <p class="service-label">Wardrobes & Dressers</p>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-img">
+          <img src="kitchen_2_noText.png" alt="Organised kitchen" class="img-cover" />
+          <div class="service-overlay">
+            <span class="service-overlay-title">Kitchen reordered so everything is always within reach.</span>
+          </div>
+        </div>
+        <p class="service-label">Pantries & Cupboards</p>
+      </div>
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-img">
+          <img src="bath_noText.png" alt="Organised bathroom" class="img-cover" />
+          <div class="service-overlay">
+            <span class="service-overlay-title">Bathroom space reorganised so every morning feels effortless.</span>
+          </div>
+        </div>
+        <p class="service-label">Vanities & Cabinets</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial">
+    <div class="testimonial-content">
+      <blockquote>
+        "Michelle &amp; Vandana came in and completely transformed our home. Every cupboard, every shelf, every drawer - finally a place for everything. I didn't realise how much the chaos was weighing on me until it was gone."
+      </blockquote>
+      <cite>— A Happy Client</cite>
+    </div>
+
+    <div class="testimonial-image">
+      <img src="plant.png" alt="" />
+    </div>
+  </div>
+
+  <!-- PROJECTS (offerings) -->
+  <section class="projects" id="projects">
+    <div class="projects-header reveal">
+      <h2 class="section-title">Our <em>Projects</em></h2>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-img slideshow">
+          <img src="new_home_setup.jpeg" class="slide active" alt="" />
+          <img src="new_home_setup_2.jpeg" class="slide" alt="" />
+        </div>
+        <h3>New Home Setup</h3>
+        <p>Perfect for families and individuals who have just moved in and want to start fresh — we set up every room with intention, so your new space feels like home from the very first day.</p>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-img slideshow">
+          <img src="drawer_shirts.jpeg" class="slide active" alt="" />
+          <img src="drawer_pants.jpeg" class="slide" alt="" />
+        </div>
+        <h3>Simplified Living</h3>
+        <p>Designed for aging parents and seniors who want a home that works with them, not against them. We simplify every corner so that daily essentials are always within reach and life feels lighter.</p>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-img slideshow">
+          <img src="cupboard_BEFORE.png" class="slide active" alt="" />
+          <img src="cupboard_AFTER.png" class="slide" alt="" />
+        </div>
+        <h3>Post-Renovation Reset</h3>
+        <p>Perfect for homeowners who have just completed renovation works. We come in once the dust has settled and organise every newly built space, cupboard and shelf so your refreshed home is set up the way you intended.</p>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-img slideshow">
+          <img src="drawer_perfumes.jpeg" class="slide active" alt="" />
+          <img src="drawer_belt.png" class="slide" alt="" />
+        </div>
+        <h3>Student Living</h3>
+        <p>Ideal for young adults heading to a new city for college or postgraduate studies. We create smart, functional systems for compact living spaces, so you can settle in quickly and focus on what matters most.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-strip">
+      <div class="about-text">
+        <p class="section-label">Who Are We</p>
+        <h2>Meet the <em>Duo...</em></h2>
+        <br />
+        <p><b><em>Michelle</em></b> — Smart, organised, and future-focused, with impeccable taste &amp; a touch of madness.</p>
+        <br />
+        <p><b><em>Vandana</em></b> — A no-nonsense thinker with lightning-fast instincts, and just enough crazy to keep things interesting.</p>
+      </div>
+      <div class="about-img">
+        <img src="mish&anu.png" alt="Michelle and Vandana" class="img-contain" />
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT STRIP -->
+  <div class="contact-strip" id="contact">
+    <div class="contact-img">
+      <img src="sofa.png" alt="Tidy living room" class="img-contain" />
+    </div>
+    <div class="contact-text">
+      <p class="section-label">Get In Touch</p>
+      <h2>Your home should feel like the truest reflection of you.</h2>
+      <p>Let's work together to transform your space into a beautifully organised, peaceful home where everything has its place and staying tidy feels effortless.</p>
+      <a href="mailto:simplysortedmumbai@gmail.com" class="text-link">Say Hi!</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">Simply <span>Sorted</span></a>
+        <p>We transform cluttered, chaotic homes into calm, functional spaces — decluttering, organising, and arranging kitchens, wardrobes and living areas. And then we train your household to keep it that way.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Our Services</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Simply Sorted © 2026 · All Rights Reserved</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Disclaimer</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll shrink
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile menu
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    const close = document.getElementById('menuClose');
+    toggle.addEventListener('click', () => menu.classList.add('open'));
+    close.addEventListener('click', () => menu.classList.remove('open'));
+    document.querySelectorAll('.menu-link').forEach(link =>
+      link.addEventListener('click', () => menu.classList.remove('open'))
+    );
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Before/after slideshows
+    document.querySelectorAll('.slideshow').forEach(slideshow => {
+      const slides = slideshow.querySelectorAll('.slide');
+      if (!slides.length) return;
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
