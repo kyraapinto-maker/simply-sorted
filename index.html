@@ -59,22 +59,23 @@
     nav.scrolled { padding: 0.9rem 8rem; }
 
     .brand { display: flex; align-items: center; gap: 0.75rem; }
-    .brand img { height: 60px; width: auto; display: block; }
+    .brand img { height: 4.5rem; width: auto; display: block; }
 
     .logo {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.45rem;
+      font-size: 2rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--brown);
       text-decoration: none;
+      margin-left: 1rem;
     }
     .logo span { font-style: italic; font-weight: 300; }
 
     .nav-links { display: flex; gap: 2.8rem; list-style: none; }
     .nav-links a {
-      font-size: 1rem;
+      font-size: 0.99rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--dark);
@@ -127,7 +128,7 @@
     @keyframes heroFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
     .hero-eyebrow {
-      font-size: 1.1rem; letter-spacing: 0.28em; text-transform: uppercase;
+      font-size: 1.1rem; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 400;
       color: var(--tan); margin-bottom: 1.2rem;
     }
 
@@ -218,6 +219,7 @@
     }
     .service-label {
       margin-top: 1rem;
+      margin-bottom: 2rem;
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem; color: var(--dark);
     }
@@ -335,6 +337,13 @@
       font-weight: 300; line-height: 1.3;
       color: #fff; margin-bottom: 1.4rem;
     }
+
+    .contact-text ul { list-style: none; }
+    .contact-text li {
+      line-height: 2;
+      color: var(--tan)
+    }
+    
     .contact-text p { font-size: 1.2rem; line-height: 1.85; color: rgba(255, 255, 255, 0.6); max-width: 400px; }
     .contact-text .text-link { color: var(--tan); }
 
@@ -356,7 +365,7 @@
       color: var(--tan); margin-bottom: 1.2rem;
     }
     .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 0.7rem; }
+    .footer-col li { margin-bottom: 0.7rem; color: rgba(255, 255, 255, 0.5) }
     .footer-col a { font-size: 1rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.25s; }
     .footer-col a:hover { color: rgba(255, 255, 255, 0.9); }
 
@@ -437,7 +446,7 @@
   <nav id="navbar">
     <div class="brand">
       <img src="logo.png" alt="Simply Sorted logo" />
-      <a href="#" class="logo">Simply <span>Sorted</span></a>
+      <a href="#" class="logo"><span style="color: #d48f23">Simply</span> <span style="color: #75754c">Sorted</span></a>
     </div>
 
     <ul class="nav-links">
@@ -483,7 +492,7 @@
     <div class="services-grid">
       <div class="service-card reveal reveal-delay-2">
         <div class="service-img">
-          <img src="bed+dresser.png" alt="Organised bedroom" class="img-cover" />
+          <img src="bedroom.png" alt="Organised bedroom" class="img-cover" />
           <div class="service-overlay">
             <span class="service-overlay-title">Bedroom space recategorised so you always know exactly where to look.</span>
           </div>
@@ -493,7 +502,7 @@
 
       <div class="service-card reveal reveal-delay-3">
         <div class="service-img">
-          <img src="kitchen_2_noText.png" alt="Organised kitchen" class="img-cover" />
+          <img src="kitchen.png" alt="Organised kitchen" class="img-cover" />
           <div class="service-overlay">
             <span class="service-overlay-title">Kitchen reordered so everything is always within reach.</span>
           </div>
@@ -503,7 +512,7 @@
 
       <div class="service-card reveal reveal-delay-1">
         <div class="service-img">
-          <img src="bath_noText.png" alt="Organised bathroom" class="img-cover" />
+          <img src="bath.png" alt="Organised bathroom" class="img-cover" />
           <div class="service-overlay">
             <span class="service-overlay-title">Bathroom space reorganised so every morning feels effortless.</span>
           </div>
@@ -592,13 +601,18 @@
   <!-- CONTACT STRIP -->
   <div class="contact-strip" id="contact">
     <div class="contact-img">
-      <img src="sofa.png" alt="Tidy living room" class="img-contain" />
+      <img src="chair.png" alt="Tidy living room" class="img-contain" />
     </div>
     <div class="contact-text">
       <p class="section-label">Get In Touch</p>
       <h2>Your home should feel like the truest reflection of you.</h2>
       <p>Let's work together to transform your space into a beautifully organised, peaceful home where everything has its place and staying tidy feels effortless.</p>
-      <a href="mailto:simplysortedmumbai@gmail.com" class="text-link">Say Hi!</a>
+      <br>
+      <ul>
+          <li><b>Call Michelle</b> : +91 9819065186</li>
+          <li><b>Call Vandana</b> : +91 9167779525</li>
+          <li><b>Or Email Us</b> : simplysortedmumbai26@gmail.com</li>
+      </ul>
     </div>
   </div>
 
@@ -610,18 +624,19 @@
         <p>We transform cluttered, chaotic homes into calm, functional spaces — decluttering, organising, and arranging kitchens, wardrobes and living areas. And then we train your household to keep it that way.</p>
       </div>
       <div class="footer-col">
-        <h4>Services</h4>
+        <h4>More Info</h4>
         <ul>
           <li><a href="#about">About</a></li>
-          <li><a href="#services">Our Services</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Follow</h4>
-        <ul>
           <li><a href="#">Instagram</a></li>
           <li><a href="#">Facebook</a></li>
+        </ul>
+      </div>
+            <div class="footer-col">
+        <h4>Say Hi!</h4>
+        <ul>
+          <li>Michelle : +91 9819065186</li>
+          <li>Vandana : +91 9167779525</li>
+          <li>simplysortedmumbai26@gmail.com</li>
         </ul>
       </div>
     </div>
